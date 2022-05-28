@@ -60,7 +60,7 @@ jobs:
           name: "Deploy Web App to Azure"
           command: |
             az webapp deployment source config-local-git --resource-group demoApp --name laravel-azure-api
-            cd ~/project/
+            cd ~/project
             git init
             git config --global user.email "me@mail.com"
             git config --global user.name "yemiwebby"

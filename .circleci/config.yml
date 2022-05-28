@@ -35,15 +35,11 @@ jobs:
       - run:
           name: "Create .env file and generate app key"
           command: |
-            mv .env.example .env
+            cp .env.example .env
             php artisan key:generate
       - run:
           name: "Run tests"
           command: php vendor/bin/phpunit
-      - persist_to_workspace:
-          root: ~/project
-          paths:
-            - .
 
   login-to-azure-and-deploy:
     executor: azure-cli/default
@@ -51,21 +47,12 @@ jobs:
       - azure-cli/install
       - azure-cli/login-with-user:
           alternate-tenant: false
-      - attach_workspace:
-          at: ~/project
       - run:
-          command: az webapp deployment source show --resource-group demoApp --name laravel-api
+          command: az webapp deployment source show --resource-group demoApp --name laravel-azure-api
       - run:
           name: "Deploy Web App to Azure"
           command: |
-            az webapp deployment source config-local-git --resource-group demoApp --name laravel-api
-            git init
-            git config --global user.email "me@mail.com"
-            git config --global user.name "yemiwebby"
-            git add .
-            git commit -m "project update"
-            git remote add azure https://$GIT_USERNAME:$GIT_PASSWORD@laravel-api.scm.azurewebsites.net/laravel-api.git
-            git push azure master --force
+            az webapp deployment source config-local-git --resource-group demoApp --name laravel-azure-api
 workflows:
   build-and-deploy:
     jobs:

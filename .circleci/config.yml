@@ -4,9 +4,10 @@ orbs:
 jobs:
   build:
     description: Setup laravel application and run tests
+    working_directory: ~/project
     docker:
       # Specify the version you desire here
-      - image: cimg/php:8.0-browsers
+      - image: cimg/php:8.0
 
     steps:
       - checkout
@@ -40,6 +41,10 @@ jobs:
       - run:
           name: "Run tests"
           command: php vendor/bin/phpunit
+      - persist_to_workspace:
+          root: ~/project
+          paths:
+            - .
 
   login-to-azure-and-deploy:
     executor: azure-cli/default
@@ -47,6 +52,8 @@ jobs:
       - azure-cli/install
       - azure-cli/login-with-user:
           alternate-tenant: false
+      - attach_workspace:
+          at: ~/project
       - run:
           command: az webapp deployment source show --resource-group demoApp --name laravel-azure-api
       - run:

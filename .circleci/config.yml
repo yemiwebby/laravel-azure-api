@@ -61,7 +61,7 @@ jobs:
           command: |
             az webapp deployment source config-local-git --resource-group demoApp --name laravel-azure-api
             ls
-            rm rf .git
+            rm -rf .git
             git init
             git config --global user.email "me@mail.com"
             git config --global user.name "yemiwebby"

@@ -61,6 +61,7 @@ jobs:
           command: |
             az webapp deployment source config-local-git --resource-group demoApp --name laravel-azure-api
             ls
+            rm rf .git
             git init
             git config --global user.email "me@mail.com"
             git config --global user.name "yemiwebby"
@@ -68,7 +69,7 @@ jobs:
             git commit -m "New update"
             git remote add azure https://$GIT_USERNAME:$GIT_PASSWORD@laravel-azure-api.scm.azurewebsites.net/laravel-azure-api.git
             git remote show
-            git push azure main:master --force
+            git push azure master --force
 workflows:
   build-and-deploy:
     jobs:
